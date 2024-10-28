@@ -35,7 +35,7 @@ public class User extends MasterEntity {
 
     @Column(name = "email", length = 100)
     private String email;
-
+    
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
