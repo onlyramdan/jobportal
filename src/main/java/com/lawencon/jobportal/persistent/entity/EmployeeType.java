@@ -26,7 +26,7 @@ uniqueConstraints = {@UniqueConstraint(name="tb_employee_types_ck",columnNames =
 @SQLDelete(sql="UPDATE tb_employee_types  SET deleted_at = NOW() WHERE id = ? AND version =?")
 @Where(clause ="deleted_at IS NULL")
 public class EmployeeType extends MasterEntity {
-     @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false)
     private String code;
 
     @Column(name = "name", length = 40)

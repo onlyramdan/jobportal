@@ -12,7 +12,8 @@ public interface StatusVacancyService {
     MasterResponse save(MasterRequest request);
     List<MasterResponse> findAll();
     MasterResponse findById(String id);
-    StatusVacancy findEntityById(String  id);
+    StatusVacancy findEntityById(String id);
+    StatusVacancy findByCode(String code);
     MasterResponse update(UpdateMasterRequest request);
     void delete(String id);
 }
