@@ -1,5 +1,0 @@
-package com.lawencon.jobportal.persistent.entity;
-
-public class Aplication {
-    
-}

@@ -74,5 +74,12 @@ public class StatusVacancyServiceImpl implements StatusVacancyService {
         BeanUtils.copyProperties(request, statusVacancy);
         return converterResponse(statusVacancyRepository.save(statusVacancy)); 
     }
+
+    @Override
+    public StatusVacancy findByCode(String code) {
+        return statusVacancyRepository.findByCode(code).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status Not Found")
+        );
+    }
     
 }
