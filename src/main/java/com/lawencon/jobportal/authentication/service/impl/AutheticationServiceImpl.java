@@ -14,7 +14,6 @@ import com.lawencon.jobportal.model.request.LoginRequest;
 import com.lawencon.jobportal.model.response.JwtAuthenticationResponse;
 import com.lawencon.jobportal.persistent.entity.User;
 import com.lawencon.jobportal.service.UserService;
-
 import lombok.AllArgsConstructor;
 
 @Service
@@ -36,4 +35,5 @@ public class AutheticationServiceImpl implements AuthenticationService {
         String token = jwtService.generateToken(UserPrinciple);
         return JwtAuthenticationResponse.builder().token(token).build();
     }
+
 }

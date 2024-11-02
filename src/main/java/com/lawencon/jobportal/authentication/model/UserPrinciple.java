@@ -19,7 +19,6 @@ public class UserPrinciple implements UserDetails {
 
     private Collection<? extends GrantedAuthority>  authorities;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

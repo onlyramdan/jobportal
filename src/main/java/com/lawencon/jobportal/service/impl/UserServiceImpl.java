@@ -62,9 +62,9 @@ public class UserServiceImpl implements UserService {
     public User save(CreateUserRequest request) {
         User user = new User();
         BeanUtils.copyProperties(request, user);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(request.getPassword());
         Role role = roleService.findEntityById(request.getRoleId());
-        user.setRole(role);
+        user.setRole(role); 
         user.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         user.setUpdatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         user.setCreatedBy("system");
