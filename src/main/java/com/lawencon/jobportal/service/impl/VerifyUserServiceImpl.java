@@ -107,58 +107,70 @@ public class VerifyUserServiceImpl implements VerifyUserService {
     }
 
     private String createEmailTemplate(String verificationCode) {
-        return """
-               <!DOCTYPE html>
-               <html>
-               <head>
-                   <style>
-                       body {
-                           font-family: Arial, sans-serif;
-                           background-color: #f4f4f4;
-                           padding: 20px;
-                       }
-                       .email-container {
-                           max-width: 600px;
-                           margin: auto;
-                           background-color: #ffffff;
-                           padding: 20px;
-                           border-radius: 10px;
-                           box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                       }
-                       .header {
-                           text-align: center;
-                           color: #333;
-                       }
-                       .otp {
-                           font-size: 24px;
-                           color: #4CAF50;
-                           margin: 20px 0;
-                           text-align: center;
-                           font-weight: bold;
-                       }
-                       .footer {
-                           font-size: 12px;
-                           color: #777;
-                           text-align: center;
-                           margin-top: 20px;
-                       }
-                   </style>
-               </head>
-               <body>
-                   <div class="email-container">
-                       <h2 class="header">Email Verification</h2>
-                       <p>Thank you for registering. Please use the following OTP to complete your registration:</p>
-                       <div class="otp">
-                       """ + verificationCode +""" 
-                       </div>
-                       <p>This code is valid for 15 minutes. If you did not request this, please ignore this email.</p>
-                       <div class="footer">
-                           <p>Best Regards,</p>
-                           <p>Your Company Team</p>
-                       </div>
-                   </div>
-               </body>
-               </html>
-               """;
+        return String.format("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #ffffff; 
+                    padding: 20px;
+                }
+                .email-container {
+                    max-width: 600px;
+                    margin: 0 auto;
+                    background-color: #ffffff;
+                    padding: 10px;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    border: 1px solid #e0e0e0;
+                    text-align: center;
+                }
+                .header {
+                    text-align: center;
+                    color: #333;
+                }
+                .header img {
+                    max-width: 100px;
+                    margin-bottom: 10px;
+                }
+                p {
+                    color: #777;
+                    margin: 10px 0;
+                    white-space: normal;
+                }
+                .otp {
+                    font-size: 24px;
+                    color: #4CAF50;
+                    margin: 10px 0;
+                    text-align: center;
+                    font-weight: bold;
+                }
+                .footer {
+                    font-size: 12px;
+                    color: #777;
+                    text-align: center;
+                    margin-top: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    <img src="https://www.lawencon.com/wp-content/uploads/2024/06/Logo.png" alt="Company Logo">
+                    <h2>Email Verification</h2>
+                </div>
+                <p>Thank you for registering. Please use the following OTP to complete your registration:</p>
+                <div class="otp">%s</div>
+                <p>This code is valid for 15 minutes. If you did not request this, please ignore this email.</p>
+                <div class="footer">
+                    <p>Best Regards,</p>
+                    <p>PT LEWENCON</p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """, verificationCode);
     }
 }
