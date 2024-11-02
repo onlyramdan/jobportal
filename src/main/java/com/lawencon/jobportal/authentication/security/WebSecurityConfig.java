@@ -43,7 +43,7 @@ public class WebSecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(request->request
-                    .requestMatchers("/api/v1/login", "/api/v1/registers").permitAll()
+                    .requestMatchers("/api/v1/login", "/api/v1/registers", "/api/v1/verify","/api/v1/resend").permitAll()
                     .anyRequest().authenticated())
         .httpBasic(Customizer.withDefaults())
         .sessionManagement(
