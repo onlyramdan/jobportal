@@ -1,7 +1,9 @@
 package com.lawencon.jobportal.service.impl;
 
+import com.lawencon.jobportal.config.RabbitMQConfig;
 import com.lawencon.jobportal.model.request.CreateVacancyRequest;
 import com.lawencon.jobportal.model.request.CreateVacancyTrxRequest;
+import com.lawencon.jobportal.model.request.NotificationRequest;
 import com.lawencon.jobportal.model.request.UpdateStatuVacancy;
 import com.lawencon.jobportal.model.response.VacancyResponse;
 import com.lawencon.jobportal.persistent.entity.StatusVacancy;
@@ -15,6 +17,8 @@ import com.lawencon.jobportal.service.StatusVacancyTrxService;
 import com.lawencon.jobportal.service.EmployeeTypeService;
 import com.lawencon.jobportal.service.ExperienceLevelService;
 import com.lawencon.jobportal.service.VacancyService;
+
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -41,6 +45,9 @@ public class VacancyServiceImpl implements VacancyService {
     private final ExperienceLevelService experienceLevelService;
     private final StatusVacancyTrxService  statusVacancyTrxService;
     private final StatusVacancyService statusVacancyService;
+    
+    private final RabbitTemplate  rabbitTemplate;
+
 
     private VacancyResponse convertToResponse(Vacancy vacancy) {
         VacancyResponse response = new VacancyResponse();
@@ -136,6 +143,16 @@ public class VacancyServiceImpl implements VacancyService {
         CreateVacancyTrxRequest trxRequest = new CreateVacancyTrxRequest();
         trxRequest.setStatusVacancy(statusVacancy);
         trxRequest.setVacancy(vacancy);
-        return  statusVacancyTrxService.save(trxRequest);
+        StatusVacancyTrx vacancyTrx =  statusVacancyTrxService.save(trxRequest);
+
+        if (vacancyTrx.getStatus().getCode().equals("ON")) {
+            NotificationRequest notifRequest=  new NotificationRequest();
+            notifRequest.setTitle("OPENED NEW Vacancy " +  vacancy.getJobTitle().getName());
+            notifRequest.setMessage(vacancy.getOverview());
+            notifRequest.setStatusVacancyTrxId(vacancyTrx.getId());
+            rabbitTemplate.convertAndSend(RabbitMQConfig.VACANCY_NOTIFICATION_EXCHANGE,
+                                      "vacancy.created.new", notifRequest);
+        }
+        return vacancyTrx;
     }
 }

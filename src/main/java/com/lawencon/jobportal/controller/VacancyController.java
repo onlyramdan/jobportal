@@ -75,7 +75,7 @@ public class VacancyController {
     }
 
     @PostMapping("/changestatus")
-    public ResponseEntity<WebResponse<?>>  changeStatus(@RequestBody UpdateStatuVacancy request) {
+    public ResponseEntity<WebResponse<?>> changeStatus(@RequestBody UpdateStatuVacancy request) {
         return ResponseEntity.ok(ResponseHelper.ok(vacancyService.changeStatus(request)));
     }
 
