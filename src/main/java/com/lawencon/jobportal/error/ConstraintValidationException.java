@@ -16,7 +16,6 @@ import lombok.Getter;
 
 @Getter
 public class ConstraintValidationException extends ValidationException {
-
   private final transient Set<ConstraintViolation<?>> constraintViolations;
   private final Map<String, List<String>> errors;
 

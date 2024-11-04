@@ -36,7 +36,7 @@ public class AuthenticationController {
     }
     
     @PostMapping(value = "/login" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<JwtAuthenticationResponse>> login(@RequestBody LoginRequest  request) {
+    public ResponseEntity<WebResponse<JwtAuthenticationResponse>> login(@Valid @RequestBody LoginRequest  request) {
         return  ResponseEntity.ok(ResponseHelper.ok(authenticationService.login(request)));
     }
 
