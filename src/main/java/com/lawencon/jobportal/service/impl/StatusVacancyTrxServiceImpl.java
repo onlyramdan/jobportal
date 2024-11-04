@@ -69,4 +69,11 @@ public class StatusVacancyTrxServiceImpl implements StatusVacancyTrxService {
         }
         statusVacancyTrxRepository.deleteById(id);
     }
+
+    @Override
+    public StatusVacancyTrx findEntityById(String id) {
+        return statusVacancyTrxRepository.findById(id).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Transaction not found")
+        );
+    }
 }
