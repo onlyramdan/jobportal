@@ -14,9 +14,8 @@ import jakarta.validation.constraints.NotBlank;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotBlankParam {
-    String messaege()  default "cannot be empty";
+    String message()  default "cannot be empty";
     String fieldName() default "";
     Class<?>[] groups() default{};
     Class<? extends Payload>[] payload() default{};
-
 }

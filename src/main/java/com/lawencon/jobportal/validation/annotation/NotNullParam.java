@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotBlank;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotNullParam {
-    String messaege()  default "is required";
+    String message()  default "is required";
     String fieldName() default "";
     Class<?>[] groups() default{};
     Class<? extends Payload>[] payload() default{};
