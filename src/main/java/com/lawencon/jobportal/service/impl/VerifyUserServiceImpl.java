@@ -110,7 +110,7 @@ public class VerifyUserServiceImpl implements VerifyUserService {
         try {
             Context context = new Context();
             context.setVariable("verificationCode", verificationCode);
-            return templateEngine.process("templates/verification_email_template.html", context);
+            return templateEngine.process("VerficationTemplate.html", context);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to load email template");
         }
