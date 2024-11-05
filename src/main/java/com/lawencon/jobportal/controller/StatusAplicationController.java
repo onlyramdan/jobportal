@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/apl-satutuses"})
+@RequestMapping({"/api/v1/application-statuses"})
 public class StatusAplicationController {
     private final StatusAplicationService statusAplicationService;
 

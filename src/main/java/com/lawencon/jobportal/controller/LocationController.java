@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/location"})
+@RequestMapping({"/api/v1/locations"})
 public class LocationController {
     private final LocationService locationService;
 
