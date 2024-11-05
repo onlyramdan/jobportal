@@ -26,8 +26,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class StageServiceImpl implements  StageService {
     private final StageRepostiory stageRepostiory;   
-    
-    
+        
     private MasterResponse converterResponse(Stage  stage) {
         MasterResponse masterResponse = new MasterResponse();
         BeanUtils.copyProperties(stage, masterResponse);
@@ -74,5 +73,11 @@ public class StageServiceImpl implements  StageService {
         Stage stage = findEntityById(request.getId());
         BeanUtils.copyProperties(request, stage);
         return converterResponse(stageRepostiory.save(stage)); 
+    }
+
+    @Override
+    public Stage findByCode(String code) {
+        return stageRepostiory.findByCode(code).orElseThrow(
+            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Stage Not Found"));
     }
 }
