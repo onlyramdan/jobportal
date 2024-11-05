@@ -11,4 +11,5 @@ public interface StatusVacancyTrxService {
     StatusVacancyTrx save(CreateVacancyTrxRequest request);
     StatusVacancyTrx update(String id, CreateVacancyTrxRequest request);
     void delete(String id);
+    StatusVacancyTrx findEntityById(String id);
 }
