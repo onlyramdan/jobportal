@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/explevels"})
+@RequestMapping({"/api/v1/experience-levels"})
 public class ExperienceLevelController {
     private final  ExperienceLevelService experienceLevelService;
 

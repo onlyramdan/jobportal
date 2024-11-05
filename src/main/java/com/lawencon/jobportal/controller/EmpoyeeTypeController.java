@@ -21,7 +21,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/emtypes"})
+@RequestMapping({"/api/v1/employee-types"})
 public class EmpoyeeTypeController {
     private final EmployeeTypeService employeeTypeService;
 

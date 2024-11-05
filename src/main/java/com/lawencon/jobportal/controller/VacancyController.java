@@ -6,14 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.lawencon.jobportal.helper.ResponseHelper;
 import com.lawencon.jobportal.model.request.CreateVacancyRequest;
-import com.lawencon.jobportal.model.request.CreateVacancyTrxRequest;
 import com.lawencon.jobportal.model.request.UpdateStatuVacancy;
 import com.lawencon.jobportal.model.response.VacancyResponse;
 import com.lawencon.jobportal.model.response.WebResponse;
-import com.lawencon.jobportal.persistent.entity.StatusVacancy;
-import com.lawencon.jobportal.persistent.entity.Vacancy;
-import com.lawencon.jobportal.service.StatusVacancyService;
-import com.lawencon.jobportal.service.StatusVacancyTrxService;
 import com.lawencon.jobportal.service.VacancyService;
 
 import lombok.AllArgsConstructor;
@@ -78,5 +73,4 @@ public class VacancyController {
     public ResponseEntity<WebResponse<?>> changeStatus(@RequestBody UpdateStatuVacancy request) {
         return ResponseEntity.ok(ResponseHelper.ok(vacancyService.changeStatus(request)));
     }
-
 }
