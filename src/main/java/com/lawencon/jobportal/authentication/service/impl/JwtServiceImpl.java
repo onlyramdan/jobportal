@@ -23,24 +23,24 @@ import java.util.function.Function;
 
 @Service
 @AllArgsConstructor
-public class JwtServiceImpl  implements JwtService {
+public class JwtServiceImpl implements JwtService {
 
     private String secretKey;
 
-    public  JwtServiceImpl() {
+    public JwtServiceImpl() {
         secretKey = generateSecretKey();
     }
 
     @Override
     public String generateToken(UserDetails userDetails) {
-    Map<String, Object> claims = new HashMap<>();
-    return Jwts.builder()
-        .setClaims(claims)
-        .setSubject(userDetails.getUsername())
-        .setIssuedAt(new Date(System.currentTimeMillis()))
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 3)) 
-        .signWith(getKey(), SignatureAlgorithm.HS256)
-        .compact();
+        Map<String, Object> claims = new HashMap<>();
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 3))
+                .signWith(getKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     @Override
@@ -55,10 +55,10 @@ public class JwtServiceImpl  implements JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-            .setSigningKey(getKey())
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+                .setSigningKey(getKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     @Override
@@ -75,19 +75,19 @@ public class JwtServiceImpl  implements JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private String generateSecretKey(){
-        try{
+    private String generateSecretKey() {
+        try {
             KeyGenerator keyGenerator = KeyGenerator.getInstance("HmacSHA256");
-            SecretKey secretKey =  keyGenerator.generateKey();
+            SecretKey secretKey = keyGenerator.generateKey();
             return Base64.getEncoder().encodeToString(secretKey.getEncoded());
-        }catch ( NoSuchAlgorithmException e ){
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Eerror Generating secret key");
         }
     }
-    private Key getKey(){
+
+    private Key getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    
 }
