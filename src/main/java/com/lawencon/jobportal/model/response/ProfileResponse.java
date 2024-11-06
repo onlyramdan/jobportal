@@ -9,7 +9,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ProfileResponse {
-
     private String id;
     private String userId;
     private String fullName;
