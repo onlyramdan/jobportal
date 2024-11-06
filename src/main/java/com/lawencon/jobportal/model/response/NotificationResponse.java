@@ -1,7 +1,5 @@
 package com.lawencon.jobportal.model.response;
 
-import javax.print.DocFlavor.STRING;
-
 import lombok.Builder;
 import lombok.Data;
 
