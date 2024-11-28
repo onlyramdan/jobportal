@@ -9,10 +9,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.lawencon.jobportal.authentication.helper.SessionHelper;
 import com.lawencon.jobportal.authentication.service.AuthenticationService;
 import com.lawencon.jobportal.authentication.service.JwtService;
 import com.lawencon.jobportal.model.request.LoginRequest;
 import com.lawencon.jobportal.model.response.JwtAuthenticationResponse;
+import com.lawencon.jobportal.model.response.UserSessionResponse;
 import com.lawencon.jobportal.persistent.entity.User;
 import com.lawencon.jobportal.service.UserService;
 import lombok.AllArgsConstructor;
@@ -34,8 +36,13 @@ public class AutheticationServiceImpl implements AuthenticationService {
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         UserDetails UserPrinciple = userService.userDetailsService().loadUserByUsername(loginRequest.getUsername());
         User user = userOpt.get();
-        String token = jwtService.generateToken(UserPrinciple);
+        String token = jwtService.generateToken(UserPrinciple, user);
         return JwtAuthenticationResponse.builder().token(token).build();
-    }
+    }   
 
+    @Override
+    public UserSessionResponse getSession() {
+        User user = SessionHelper.getLoginUser();
+        return UserSessionResponse.builder().id(user.getId()).roleCode(user.getRole().getCode()).build();
+    }
 }

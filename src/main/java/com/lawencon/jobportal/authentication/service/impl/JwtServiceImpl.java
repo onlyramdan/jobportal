@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.jobportal.authentication.service.JwtService;
+import com.lawencon.jobportal.persistent.entity.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -32,8 +33,10 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails, User user) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("id", user.getId());
+        claims.put("roleCode",user.getRole().getCode());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
