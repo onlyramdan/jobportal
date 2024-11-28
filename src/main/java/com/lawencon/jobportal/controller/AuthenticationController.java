@@ -1,7 +1,8 @@
-package com.lawencon.jobportal.controller;
+    package com.lawencon.jobportal.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,7 @@ import com.lawencon.jobportal.model.request.CreateUserRequest;
 import com.lawencon.jobportal.model.request.LoginRequest;
 import com.lawencon.jobportal.model.request.VerifyUserRequest;
 import com.lawencon.jobportal.model.response.JwtAuthenticationResponse;
+import com.lawencon.jobportal.model.response.UserSessionResponse;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.VerifyUserService;
 
@@ -52,4 +54,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(ResponseHelper.ok("Verification code sent"));
     }
 
+    @GetMapping(value = "user/session")
+    public ResponseEntity<WebResponse<UserSessionResponse>> getSession(){
+        return ResponseEntity.ok(ResponseHelper.ok(authenticationService.getSession()));
+    }
 }
