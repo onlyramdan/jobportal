@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,25 +11,27 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.helper.ResponseHelper;
 import com.lawencon.jobportal.model.request.MasterRequest;
+import com.lawencon.jobportal.model.request.PagingRequest;
 import com.lawencon.jobportal.model.request.UpdateMasterRequest;
+import com.lawencon.jobportal.model.response.MasterResponse;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.LocationService;
 
 import lombok.AllArgsConstructor;
 
-
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/locations"})
+@RequestMapping({ "/api/v1/locations" })
 public class LocationController {
     private final LocationService locationService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> save(@RequestBody  MasterRequest request) {
+    public ResponseEntity<WebResponse<?>> save(@RequestBody MasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(locationService.save(request)));
     }
 
@@ -42,15 +46,22 @@ public class LocationController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request){
+public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(locationService.update(request)));
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
+    public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
         locationService.delete(id);
         return ResponseEntity.ok(ResponseHelper.ok());
-    }    
+    }
+
+    @GetMapping("/pages")
+    public ResponseEntity<WebResponse<List<MasterResponse>>> findAllPage(
+        PagingRequest pagingRequest,
+        @RequestParam(required = false)  String inquiry)
+    {
+        return ResponseEntity.ok(ResponseHelper.ok(pagingRequest,locationService.findAll(pagingRequest, inquiry)));
+    }
 
 }
-

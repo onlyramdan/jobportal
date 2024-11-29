@@ -13,8 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
-    private String userId; 
+    private String id; 
     private String username; 
     private String email;
-    private Role userRole;
+    private String role;
+    private Boolean isActive;
+    private Long version;
 }

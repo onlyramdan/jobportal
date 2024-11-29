@@ -12,13 +12,16 @@ import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.lawencon.jobportal.model.request.CreateProfileRequest;
 import com.lawencon.jobportal.model.request.CreateUserRequest;
 import com.lawencon.jobportal.model.request.VerifyUserRequest;
+import com.lawencon.jobportal.persistent.entity.User;
 import com.lawencon.jobportal.persistent.entity.VerifyUser;
 import com.lawencon.jobportal.persistent.repository.VerifyUserRepository;
 import com.lawencon.jobportal.service.EmailService;
 import com.lawencon.jobportal.service.UserService;
 import com.lawencon.jobportal.service.VerifyUserService;
+import com.lawencon.jobportal.service.ProfileService;
 
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
@@ -31,16 +34,23 @@ public class VerifyUserServiceImpl implements VerifyUserService {
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final TemplateEngine templateEngine;
+    private final ProfileService profileService;
 
     @Override
     public void register(CreateUserRequest request) {
+        if(userService.checkUsername(request.getUsername())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exist");
+        }
+        if (userService.checkEmail(request.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exist");
+        }
         VerifyUser verifyUser = new VerifyUser();
         BeanUtils.copyProperties(request, verifyUser);
         verifyUser.setVerificationCode(generateVerificationCode());
         verifyUser.setVerificationExpiredAt(ZonedDateTime.now().plusMinutes(15));
         verifyUser.setIsEnable(false);
         verifyUser.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        
         VerifyUser verifyUserSaved = verifyUserRepository.save(verifyUser);
         try {
             String emailContent = createEmailTemplate(verifyUserSaved.getVerificationCode());
@@ -73,7 +83,10 @@ public class VerifyUserServiceImpl implements VerifyUserService {
             request.setPassword(user.getPassword());
             request.setRoleId(user.getRoleId());
             request.setUsername(user.getUsername());
-            userService.save(request);
+            User userSaved = userService.save(request);
+            CreateProfileRequest profileRequest = new CreateProfileRequest();
+            profileRequest.setUser(userSaved);
+            profileService.save(profileRequest);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid verification code");
         }

@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.controller;
 
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lawencon.jobportal.helper.ResponseHelper;
 import com.lawencon.jobportal.model.request.MasterRequest;
 import com.lawencon.jobportal.model.response.MasterResponse;
+import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.persistent.entity.Role;
 import com.lawencon.jobportal.service.RoleService;
 
@@ -30,8 +34,8 @@ public class RoleController {
     }
 
     @GetMapping()
-    public ResponseEntity<?> findAll() {
-        return ResponseEntity.ok(roleService.findAll());
+    public ResponseEntity<WebResponse<List<MasterResponse>>> findAll() {
+        return ResponseEntity.ok(ResponseHelper.ok(roleService.findAll()));
     }
 
     @GetMapping("/{id}")
@@ -40,7 +44,7 @@ public class RoleController {
     }
 
     @PutMapping()
-    public ResponseEntity<?> update(@RequestBody Role request) {
+    public ResponseEntity<?> update(@RequestBody Role request) {    
         return ResponseEntity.ok(roleService.update(request));
     }
 
@@ -48,9 +52,9 @@ public class RoleController {
     public void delete(@PathVariable("id") String id) {
         roleService.delete(id);
     }
-
+            
     @GetMapping("/code/{code}")
-    public ResponseEntity<?> findByCode(@PathVariable("code") String code) {
-        return ResponseEntity.ok(roleService.findByCode(code));
+    public ResponseEntity<WebResponse<?>> findByCode(@PathVariable("code") String code) {
+        return ResponseEntity.ok(ResponseHelper.ok(roleService.findByCode(code)));
     }
 }

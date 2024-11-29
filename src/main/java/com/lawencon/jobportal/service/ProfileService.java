@@ -13,4 +13,5 @@ public interface ProfileService {
     Profile findEntityById(String  id);
     ProfileResponse update(CreateProfileRequest request, String id);
     void delete(String id);
+    Boolean checkProfileExist(String id);
 }
