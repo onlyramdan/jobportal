@@ -34,12 +34,12 @@ public class Profile extends MasterEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "full_name", length = 50, nullable = false)
+    @Column(name = "full_name", length = 50, nullable = true)
     private String fullName;
 
-    @Column(name = "phone_number", length = 20, nullable = false)
+    @Column(name = "phone_number", length = 20, nullable = true)
     private String phoneNumber;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address", nullable = true)
     private String address;
 }

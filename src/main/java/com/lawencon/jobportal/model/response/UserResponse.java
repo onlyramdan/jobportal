@@ -16,5 +16,7 @@ public class UserResponse {
     private String userId; 
     private String username; 
     private String email;
-    private Role userRole;
+    private String role;
+    private Boolean isActive;
+    private Long version;
 }

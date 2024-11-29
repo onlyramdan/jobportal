@@ -8,16 +8,16 @@ import org.springframework.web.server.ResponseStatusException;
 import com.lawencon.jobportal.model.request.CreateProfileRequest;
 import com.lawencon.jobportal.model.response.ProfileResponse;
 import com.lawencon.jobportal.persistent.entity.Profile;
-import com.lawencon.jobportal.persistent.entity.User;
 import com.lawencon.jobportal.persistent.repository.ProfileRepository;
 import com.lawencon.jobportal.service.ProfileService;
-import com.lawencon.jobportal.service.UserService;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 import java.time.ZoneOffset;
 
 
@@ -26,7 +26,6 @@ import java.time.ZoneOffset;
 @Transactional
 public class ProfileServiceImpl implements  ProfileService {
     private final ProfileRepository  profileRepository;
-    private final UserService userService;
 
     private ProfileResponse converterResponse(Profile profile){
         ProfileResponse response = new ProfileResponse();
@@ -63,9 +62,7 @@ public class ProfileServiceImpl implements  ProfileService {
     @Override
     public ProfileResponse save(CreateProfileRequest request) {
         Profile profile = new Profile();
-        User user  = userService.findEntityById(request.getUserId());
-        BeanUtils.copyProperties(request, profile);
-        profile.setUser(user);
+        profile.setUser(request.getUser());
         profile.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         profile.setUpdatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         profile.setCreatedBy("system");
@@ -80,6 +77,17 @@ public class ProfileServiceImpl implements  ProfileService {
         BeanUtils.copyProperties(request, profile);
         return  converterResponse(profileRepository.save(profile));
     }
-    
 
+    @Override
+    public Boolean checkProfileExist(String id) {
+        Optional<Profile> profile = profileRepository.findById(id);
+        if(!profile.isPresent()){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Profile Not Found");
+        }
+        Profile existingProfile = profile.get();
+        boolean hasFullName = !StringUtils.isBlank(existingProfile.getFullName());
+        boolean hasPhone = !StringUtils.isBlank(existingProfile.getPhoneNumber());
+        return hasFullName && hasPhone;
+    }
+    
 }

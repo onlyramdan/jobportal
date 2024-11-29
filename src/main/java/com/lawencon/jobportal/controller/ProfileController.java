@@ -1,6 +1,5 @@
 package com.lawencon.jobportal.controller;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +23,6 @@ import lombok.AllArgsConstructor;
 public class ProfileController {
     private final  ProfileService profileService;
 
-     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<WebResponse<?>> createRole(@RequestBody CreateProfileRequest request) {
-        return ResponseEntity.ok(ResponseHelper.ok(profileService.save(request)));
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<WebResponse<?>> findById(@PathVariable("id") String id) {
         return ResponseEntity.ok(ResponseHelper.ok(profileService.findById(id)));
@@ -49,5 +43,10 @@ public class ProfileController {
     @GetMapping("/user/{id}")
     public ResponseEntity<WebResponse<?>> findByUserId(@PathVariable("id") String id) {
         return ResponseEntity.ok(ResponseHelper.ok(profileService.findByUserId(id)));
+    }
+
+    @GetMapping("{id}/check")
+    public ResponseEntity<WebResponse<?>> checkProfile(@PathVariable("id") String id) {
+        return ResponseEntity.ok(ResponseHelper.ok(profileService.checkProfileExist(id)));
     }
 }
