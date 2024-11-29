@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.service;
 
+import java.util.Optional;
+
 import com.lawencon.jobportal.model.request.CreateProfileRequest;
 import com.lawencon.jobportal.model.response.ProfileResponse;
 
@@ -14,4 +16,5 @@ public interface ProfileService {
     ProfileResponse update(CreateProfileRequest request, String id);
     void delete(String id);
     Boolean checkProfileExist(String id);
+    Optional<Profile> existUserId(String id);
 }

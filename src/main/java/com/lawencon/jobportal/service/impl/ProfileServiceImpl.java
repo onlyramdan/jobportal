@@ -89,5 +89,11 @@ public class ProfileServiceImpl implements  ProfileService {
         boolean hasPhone = !StringUtils.isBlank(existingProfile.getPhoneNumber());
         return hasFullName && hasPhone;
     }
+
+    @Override
+    public Optional<Profile> existUserId(String id) {
+        return profileRepository.findByUserId(id);
+    }
+    
     
 }

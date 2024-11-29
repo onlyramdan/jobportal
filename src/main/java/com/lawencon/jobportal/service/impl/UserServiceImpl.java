@@ -26,7 +26,9 @@ import com.lawencon.jobportal.model.request.CreateProfileRequest;
 import com.lawencon.jobportal.model.request.CreateUserRequest;
 import com.lawencon.jobportal.model.request.PagingRequest;
 import com.lawencon.jobportal.model.request.UpdateUserRequest;
+import com.lawencon.jobportal.model.response.ProfileResponse;
 import com.lawencon.jobportal.model.response.UserResponse;
+import com.lawencon.jobportal.persistent.entity.Profile;
 import com.lawencon.jobportal.persistent.entity.Role;
 import com.lawencon.jobportal.persistent.entity.User;
 import com.lawencon.jobportal.persistent.repository.UserRepository;
@@ -49,24 +51,54 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ProfileService profileService;
 
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    private UserResponse mapUserToUserResponse(User user) {
+        UserResponse userResponse = new UserResponse();
+        BeanUtils.copyProperties(user, userResponse);
+        userResponse.setRole(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
     }
 
     @Override
-    public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(
+    public List<UserResponse> findAll() {
+        List<User> users = userRepository.findAll();
+        List<UserResponse> userResponses = users.stream()
+                .map(this::mapUserToUserResponse)
+                .toList();
+        return userResponses;
+
+    }
+
+    @Override
+    public UserResponse findById(String id) {
+        User user = userRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found"));
+        UserResponse userResponse = new UserResponse();
+        BeanUtils.copyProperties(user, userResponse);
+        userResponse.setRole(user.getRole().getName());
+        userResponse.setRoleId(user.getRole().getId());
+        return userResponse;
     }
 
     @Override
-    public User update(UpdateUserRequest request) {
+    public void update(UpdateUserRequest request) {
         Role role = roleService.findEntityById(request.getRoleId());
-        User user = findById(request.getId());
+        User user = findEntityById(request.getId());
+        if(!user.getUsername().equals(request.getUsername())){
+            if(checkUsername(request.getUsername())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+            }
+        }
+
+        if(!user.getEmail().equals(request.getEmail())){
+            if(checkEmail(request.getEmail())){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already exists");
+            }
+        }
+
         BeanUtils.copyProperties(request, user);
         user.setRole(role);
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     @Override
@@ -75,7 +107,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(request, user);
         user.setPassword(request.getPassword());
         Role role = roleService.findEntityById(request.getRoleId());
-        user.setRole(role); 
+        user.setRole(role);
         user.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         user.setUpdatedAt(ZonedDateTime.now(ZoneOffset.UTC));
         user.setCreatedBy("system");
@@ -86,6 +118,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(String id) {
+        Optional<Profile> profile = profileService.existUserId(id);
+        if (profile.isPresent()) {
+            profileService.delete(profile.get().getId());
+        }
         userRepository.deleteById(id);
     }
 
@@ -98,9 +134,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUsername(String username, String password) {
         User user = userRepository.findByUsername(username).orElseThrow(
-            () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Not Found")
-        );
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Not Found"));
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Password");
         }
         return Optional.of(user);
@@ -109,12 +144,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailsService userDetailsService() {
-      return new UserDetailsService() {
+        return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not Exist"));
+                User user = userRepository.findByUsername(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not Exist"));
 
-                List<GrantedAuthority>  authorities = new ArrayList<>();
+                List<GrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority(user.getRole().getCode()));
                 return UserPrinciple.builder().user(user).role(user.getRole()).authorities(authorities).build();
             }
@@ -127,23 +163,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean checkEmail(String email){
+    public Boolean checkEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
     @Override
     public Page<UserResponse> findAll(PagingRequest pagingRequest, String inquiry) {
-        PageRequest pageRequest  = PageRequest.of(pagingRequest.getPage(), pagingRequest.getPageSize(),
-        SpecificationHelper.createSort(pagingRequest.getSortBy()));
-        Specification<User>  spec  = Specification.where(null);
-        if (inquiry  != null) {
-            spec = spec.and(SpecificationHelper.inquiryFilter(Arrays.asList("username","email", "role.name"), inquiry));
+        PageRequest pageRequest = PageRequest.of(pagingRequest.getPage(), pagingRequest.getPageSize(),
+                SpecificationHelper.createSort(pagingRequest.getSortBy()));
+        Specification<User> spec = Specification.where(null);
+        if (inquiry != null) {
+            spec = spec
+                    .and(SpecificationHelper.inquiryFilter(Arrays.asList("username", "email", "role.name"), inquiry));
         }
-        Page<User> userResponse = userRepository.findAll(spec,pageRequest);
-        List<UserResponse> responses = userResponse.getContent().stream().map(user ->{
+        Page<User> userResponse = userRepository.findAll(spec, pageRequest);
+        List<UserResponse> responses = userResponse.getContent().stream().map(user -> {
             UserResponse response = new UserResponse();
             BeanUtils.copyProperties(user, response);
             response.setRole(user.getRole().getName());
+            response.setRoleId(user.getRole().getId());
             return response;
         }).toList();
         return new PageImpl<>(responses, pageRequest, userResponse.getTotalElements());
@@ -151,7 +189,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createByAdmin(CreateUserRequest request) {
-        if(checkUsername(request.getUsername())){
+        if (checkUsername(request.getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exist");
         }
         if (checkEmail(request.getEmail())) {
@@ -164,5 +202,4 @@ public class UserServiceImpl implements UserService {
         profileService.save(profileRequest);
     }
 
-    
 }

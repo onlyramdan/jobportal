@@ -13,10 +13,10 @@ import com.lawencon.jobportal.model.response.UserResponse;
 import com.lawencon.jobportal.persistent.entity.User;
 
 public interface UserService {
-    List<User> findAll();
-    User findById(String id);
+    List<UserResponse> findAll();
+    UserResponse findById(String id);
     User save(CreateUserRequest request);
-    User update(UpdateUserRequest request);
+    void update(UpdateUserRequest request);
     void delete(String id);
     User findEntityById(String id);
     UserDetailsService userDetailsService();
