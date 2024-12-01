@@ -11,4 +11,5 @@ public interface JobDescriptionService {
     JobDescriptionResponse getById(String id);
     List<JobDescriptionResponse> getByJobTitleId(String jobTitleId);
     void delete(String id);
+    void saveAll(List<CreateJobDescriptionRequest> requests);
 }

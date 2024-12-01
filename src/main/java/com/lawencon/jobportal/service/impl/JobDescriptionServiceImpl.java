@@ -78,4 +78,22 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
         return jobDescriptionRepository.findById(id).orElseThrow(() ->
              new ResponseStatusException(HttpStatus.NOT_FOUND, "Job Description Not Found"));
     }
+
+    @Override
+    public void saveAll(List<CreateJobDescriptionRequest> requests) {
+        List<JobDescription> jobDescriptions = requests.stream().map(request -> {
+            JobDescription jobDescription = new JobDescription();
+            JobTitle jobTitle = jobTitleService.findEntityById(request.getJobTitleId());
+            BeanUtils.copyProperties(request, jobDescription);
+            jobDescription.setJobTitle(jobTitle);
+            jobDescription.setCreatedAt(ZonedDateTime.now(ZoneOffset.UTC));
+            jobDescription.setUpdatedAt(ZonedDateTime.now(ZoneOffset.UTC));
+            jobDescription.setCreatedBy("system");
+            jobDescription.setUpdatedBy("system");
+            jobDescription.setIsActive(true);
+            return jobDescription;
+        }).collect(Collectors.toList());
+    
+        jobDescriptionRepository.saveAll(jobDescriptions);
+    }
 }
