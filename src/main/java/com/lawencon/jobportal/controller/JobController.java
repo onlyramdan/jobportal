@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.lawencon.jobportal.model.request.CreateJobDescriptionRequest;
 import com.lawencon.jobportal.model.request.CreateJobRequest;
 import com.lawencon.jobportal.model.request.CreateJobSpecificationsRequest;
 import com.lawencon.jobportal.model.request.PagingRequest;
+import com.lawencon.jobportal.model.response.JobResponse;
 import com.lawencon.jobportal.model.response.MasterResponse;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.JobDescriptionService;
@@ -56,4 +58,12 @@ public class JobController {
         return ResponseEntity.ok(ResponseHelper.ok("Job Successfully Created"));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<WebResponse<JobResponse>> getJobTitleById(@PathVariable String id) {
+        JobResponse jobResponse = new JobResponse();
+        jobResponse.setJobTitle(jobTitleService.findById(id));
+        jobResponse.setJobSpecList(jobSpecificationService.getAllByJobTitleId(id));
+        jobResponse.setJobDescList(jobDescriptionService.getByJobTitleId(id));
+        return ResponseEntity.ok(ResponseHelper.ok(jobResponse));
+    }
 }
