@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.jobportal.helper.ResponseHelper;
-import com.lawencon.jobportal.model.request.MasterRequest;
 import com.lawencon.jobportal.model.request.UpdateMasterRequest;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.JobTitleService;
@@ -21,13 +20,12 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/job-title"})
+@RequestMapping({ "/api/v1/job-title" })
 public class JobTitileContoller {
-    private  final JobTitleService jobTitleService;
-
+    private final JobTitleService jobTitleService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> save(@RequestBody  MasterRequest request) {
+    public ResponseEntity<WebResponse<?>> save(@RequestBody String request) {
         return ResponseEntity.ok(ResponseHelper.ok(jobTitleService.save(request)));
     }
 
@@ -42,13 +40,13 @@ public class JobTitileContoller {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request){
+    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(jobTitleService.update(request)));
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
+    public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
         jobTitleService.delete(id);
         return ResponseEntity.ok(ResponseHelper.ok());
-    }    
+    }
 }
