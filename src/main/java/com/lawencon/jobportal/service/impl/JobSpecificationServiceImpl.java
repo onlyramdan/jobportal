@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.lawencon.jobportal.model.request.CreateJobSpecificationsRequest;
+import com.lawencon.jobportal.model.request.UpdateSpecRequest;
 import com.lawencon.jobportal.model.response.JobSpecificationResponse;
 import com.lawencon.jobportal.persistent.entity.JobSpecification;
 import com.lawencon.jobportal.persistent.entity.JobTitle;
@@ -82,8 +83,6 @@ public class JobSpecificationServiceImpl implements JobSpecificationService {
 
     }
     
-
-
     @Override
     public void delete(String id) {
         JobSpecification jobSpecification = getEntityById(id);
@@ -95,5 +94,11 @@ public class JobSpecificationServiceImpl implements JobSpecificationService {
     private JobSpecification getEntityById(String id) {
         return jobSpecificationRepository.findById(id).orElseThrow(
             () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Job Specification not found"));
+    }
+
+    @Override
+    public void updateSpec(UpdateSpecRequest request) {
+        JobSpecification jobSpecification = getEntityById(request.getId());
+        jobSpecification.setSpecification(request.getSpecification());
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.lawencon.jobportal.helper.ResponseHelper;
 import com.lawencon.jobportal.model.request.CreateJobSpecificationsRequest;
+import com.lawencon.jobportal.model.request.UpdateSpecRequest;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.JobSpecificationService;
 import lombok.AllArgsConstructor;
@@ -45,5 +46,13 @@ public class JobSpecificationController {
     public ResponseEntity<WebResponse<?>> deleteJobSpecification(@PathVariable("id") String id) {
         jobSpecificationService.delete(id);
         return ResponseEntity.ok(ResponseHelper.ok("Job Specification deleted successfully"));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<WebResponse<String>> updateJobSpecification(@RequestBody UpdateSpecRequest request) {
+        jobSpecificationService.updateSpec(request);
+        return ResponseEntity.ok(ResponseHelper.ok(
+            "Job Specification updated successfully"
+        ));
     }
 }

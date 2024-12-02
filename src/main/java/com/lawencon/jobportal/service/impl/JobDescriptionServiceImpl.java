@@ -1,6 +1,7 @@
 package com.lawencon.jobportal.service.impl;
 
 import com.lawencon.jobportal.model.request.CreateJobDescriptionRequest;
+import com.lawencon.jobportal.model.request.UpdateDecscriptionRequest;
 import com.lawencon.jobportal.model.response.JobDescriptionResponse;
 import com.lawencon.jobportal.persistent.entity.JobDescription;
 import com.lawencon.jobportal.persistent.entity.JobTitle;
@@ -51,10 +52,10 @@ public class JobDescriptionServiceImpl implements JobDescriptionService {
     }
 
     @Override
-    public JobDescriptionResponse update(String id, CreateJobDescriptionRequest request) {
-        JobDescription jobDescription = getEntityById(id);
+    public void update(UpdateDecscriptionRequest request) {
+        JobDescription jobDescription = getEntityById(request.getId());
         BeanUtils.copyProperties(request, jobDescription);
-        return convertToResponse(jobDescriptionRepository.save(jobDescription));
+        jobDescriptionRepository.save(jobDescription);
     }
 
     @Override
