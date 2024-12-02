@@ -2,6 +2,7 @@ package com.lawencon.jobportal.controller;
 
 import com.lawencon.jobportal.helper.ResponseHelper;
 import com.lawencon.jobportal.model.request.CreateJobDescriptionRequest;
+import com.lawencon.jobportal.model.request.UpdateDecscriptionRequest;
 import com.lawencon.jobportal.model.response.JobDescriptionResponse;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.JobDescriptionService;
@@ -26,9 +27,10 @@ public class JobDescriptionController {
         return ResponseEntity.ok(ResponseHelper.ok(jobDescriptionService.save(request)));
     }
 
-    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> update(@PathVariable("id") String id,@RequestBody CreateJobDescriptionRequest request) {
-        return ResponseEntity.ok(ResponseHelper.ok(jobDescriptionService.update(id, request)));
+    @PutMapping()
+    public ResponseEntity<WebResponse<String>> update(@RequestBody UpdateDecscriptionRequest request) {
+        jobDescriptionService.update(request);
+        return ResponseEntity.ok(ResponseHelper.ok( "Job Description Updated Successfully"));
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
