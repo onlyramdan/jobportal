@@ -53,7 +53,7 @@ public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest re
     @DeleteMapping("/{id}")
     public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
         locationService.delete(id);
-        return ResponseEntity.ok(ResponseHelper.ok());
+        return ResponseEntity.ok(ResponseHelper.ok("Location Deleted Succesfull"));
     }
 
     @GetMapping("/pages")
