@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import com.lawencon.jobportal.helper.ResponseHelper;
 import com.lawencon.jobportal.model.request.CreateVacancyRequest;
-import com.lawencon.jobportal.model.request.UpdateStatuVacancy;
+import com.lawencon.jobportal.model.request.PagingRequest;
+import com.lawencon.jobportal.model.request.UpdateStatusVacancy;
+import com.lawencon.jobportal.model.response.VacancyDetailResponse;
 import com.lawencon.jobportal.model.response.VacancyResponse;
 import com.lawencon.jobportal.model.response.WebResponse;
 import com.lawencon.jobportal.service.VacancyService;
@@ -28,13 +30,14 @@ public class VacancyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WebResponse<VacancyResponse>> getVacancyById(@PathVariable String id) {
-        VacancyResponse response = vacancyService.getById(id);
+    public ResponseEntity<WebResponse<VacancyDetailResponse>> getVacancyById(@PathVariable String id) {
+        VacancyDetailResponse response = vacancyService.getById(id);
         return ResponseEntity.ok(ResponseHelper.ok(response));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WebResponse<VacancyResponse>> updateVacancy(@PathVariable String id, @RequestBody CreateVacancyRequest request) {
+    public ResponseEntity<WebResponse<VacancyResponse>> updateVacancy(@PathVariable String id,
+        @RequestBody CreateVacancyRequest request) {
         VacancyResponse response = vacancyService.update(id, request);
         return ResponseEntity.ok(ResponseHelper.ok(response));
     }
@@ -46,9 +49,11 @@ public class VacancyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<WebResponse<Void>> deleteVacancy(@PathVariable String id) {
+    public ResponseEntity<WebResponse<String>> deleteVacancy(@PathVariable String id) {
         vacancyService.delete(id);
-        return ResponseEntity.ok(ResponseHelper.ok());
+        return ResponseEntity.ok(ResponseHelper.ok(
+             "Vacancy deleted successfully"
+        ));
     }
 
     @GetMapping("/jobtitle/{jobTitleId}")
@@ -58,19 +63,28 @@ public class VacancyController {
     }
 
     @GetMapping("/employeetype/{employeeTypeId}")
-    public ResponseEntity<WebResponse<List<VacancyResponse>>> getVacanciesByEmployeeType(@PathVariable String employeeTypeId) {
+    public ResponseEntity<WebResponse<List<VacancyResponse>>> getVacanciesByEmployeeType(
+            @PathVariable String employeeTypeId) {
         List<VacancyResponse> responses = vacancyService.getVacanciesByEmployeeType(employeeTypeId);
         return ResponseEntity.ok(ResponseHelper.ok(responses));
     }
 
     @GetMapping("/experiencelevel/{experienceLevelId}")
-    public ResponseEntity<WebResponse<List<VacancyResponse>>> getVacanciesByExperienceLevel(@PathVariable String experienceLevelId) {
+    public ResponseEntity<WebResponse<List<VacancyResponse>>> getVacanciesByExperienceLevel(
+            @PathVariable String experienceLevelId) {
         List<VacancyResponse> responses = vacancyService.getVacanciesByExperienceLevel(experienceLevelId);
         return ResponseEntity.ok(ResponseHelper.ok(responses));
     }
 
     @PostMapping("/changestatus")
-    public ResponseEntity<WebResponse<?>> changeStatus(@RequestBody UpdateStatuVacancy request) {
+    public ResponseEntity<WebResponse<?>> changeStatus(@RequestBody UpdateStatusVacancy request) {
         return ResponseEntity.ok(ResponseHelper.ok(vacancyService.changeStatus(request)));
+    }
+
+    @GetMapping("/pages")
+    public ResponseEntity<WebResponse<List<VacancyResponse>>> getAllPage(
+            PagingRequest pagingRequest,
+            @RequestParam(required = false) String inquiry) {
+        return ResponseEntity.ok(ResponseHelper.ok(pagingRequest, vacancyService.findAllPage(pagingRequest, inquiry)));
     }
 }

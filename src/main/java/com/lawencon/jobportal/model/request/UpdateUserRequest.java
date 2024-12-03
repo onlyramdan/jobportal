@@ -5,6 +5,10 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class UpdateUserRequest extends CreateUserRequest {
+public class UpdateUserRequest{
     private String id;
+    private String username;
+    private String email;
+    private String roleId;
+    private Boolean isActive;
 }

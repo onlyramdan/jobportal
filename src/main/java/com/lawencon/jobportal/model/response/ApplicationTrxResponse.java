@@ -14,8 +14,7 @@ public class ApplicationTrxResponse {
     private String statusApplicationName;
     private LocalDate date;
     private Integer score;
-    private ZonedDateTime  createdAt;
-    private ZonedDateTime  updatedAt;
-
+    private ZonedDateTime createdAt;
+    private ZonedDateTime updatedAt;
 
 }

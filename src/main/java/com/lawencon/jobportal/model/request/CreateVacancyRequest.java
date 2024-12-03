@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class CreateVacancyRequest {
-    private String code;
     private String picHrId;
     private String jobTitleId;
     private String locationId;

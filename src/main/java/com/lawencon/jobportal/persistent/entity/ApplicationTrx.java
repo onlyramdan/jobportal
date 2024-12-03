@@ -9,7 +9,6 @@ import lombok.ToString;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -28,16 +27,16 @@ public class ApplicationTrx extends DeletableEntity {
     private Application application;
 
     @ManyToOne
-    @JoinColumn(name = "status_id")
+    @JoinColumn(name = "status_id", nullable = true)
     private StatusAplication statusApplication;
 
     @ManyToOne
     @JoinColumn(name = "stage_id", nullable = false)
     private Stage stage;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", nullable = true)
     private LocalDate date;
 
-    @Column(name = "score", nullable = false, precision = 10, scale = 2)
-    private BigDecimal score;
+    @Column(name = "score", nullable = true)
+    private Integer score;
 }

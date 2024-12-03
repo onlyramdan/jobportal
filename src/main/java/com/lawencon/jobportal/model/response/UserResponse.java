@@ -1,8 +1,6 @@
 package com.lawencon.jobportal.model.response;
 
 
-import com.lawencon.jobportal.persistent.entity.Role;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +14,7 @@ public class UserResponse {
     private String id; 
     private String username; 
     private String email;
+    private String roleId;
     private String role;
     private Boolean isActive;
     private Long version;

@@ -2,11 +2,13 @@ package com.lawencon.jobportal.config;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
 import com.lawencon.jobportal.model.request.PagingRequest;
 import com.lawencon.jobportal.model.request.SortBy;
 import com.lawencon.jobportal.model.request.SortByDirection;
@@ -25,9 +27,8 @@ public class PagingRequestArgumentResolver implements HandlerMethodArgumentResol
   public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest,
       org.springframework.web.bind.support.WebDataBinderFactory binderFactory) throws Exception {
-    PagingRequest pagingRequest =
-        PagingRequest.builder().page(Integer.parseInt(webRequest.getParameter("page")))
-            .pageSize(Integer.parseInt(webRequest.getParameter("pageSize"))).build();
+    PagingRequest pagingRequest = PagingRequest.builder().page(Integer.parseInt(webRequest.getParameter("page")))
+        .pageSize(Integer.parseInt(webRequest.getParameter("pageSize"))).build();
 
     String sortByParam = webRequest.getParameter("sortBy");
     if (sortByParam != null) {

@@ -17,6 +17,7 @@ import com.lawencon.jobportal.model.response.JwtAuthenticationResponse;
 import com.lawencon.jobportal.model.response.UserSessionResponse;
 import com.lawencon.jobportal.persistent.entity.User;
 import com.lawencon.jobportal.service.UserService;
+
 import lombok.AllArgsConstructor;
 
 @Service
@@ -30,7 +31,7 @@ public class AutheticationServiceImpl implements AuthenticationService {
     public JwtAuthenticationResponse login(LoginRequest loginRequest) {
         Optional<User> userOpt = userService.getUsername(loginRequest.getUsername(), loginRequest.getPassword());
         if (userOpt.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Invalid username or password");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid username or password");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -38,7 +39,7 @@ public class AutheticationServiceImpl implements AuthenticationService {
         User user = userOpt.get();
         String token = jwtService.generateToken(UserPrinciple, user);
         return JwtAuthenticationResponse.builder().token(token).build();
-    }   
+    }
 
     @Override
     public UserSessionResponse getSession() {

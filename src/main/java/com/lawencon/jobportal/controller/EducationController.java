@@ -20,30 +20,30 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/educations"})
+@RequestMapping({ "/api/v1/educations" })
 public class EducationController {
     private final EducationService educationService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>>  saveEducation(@RequestBody CreateEducationRequest education) {
+    public ResponseEntity<WebResponse<?>> saveEducation(@RequestBody CreateEducationRequest education) {
         return ResponseEntity.ok(ResponseHelper.ok(educationService.save(education)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> findById(@PathVariable("id") String id){
+    public ResponseEntity<WebResponse<?>> findById(@PathVariable("id") String id) {
         return ResponseEntity.ok(ResponseHelper.ok(educationService.getById(id)));
     }
 
     @GetMapping("/profile/{id}")
-    public ResponseEntity<WebResponse<?>> getBUserId(@PathVariable("id") String id){
+    public ResponseEntity<WebResponse<?>> getBUserId(@PathVariable("id") String id) {
         return ResponseEntity.ok(ResponseHelper.ok(educationService.getAllByProfileId(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> update(@PathVariable("id") String id, @RequestBody  CreateEducationRequest education) {
+    public ResponseEntity<WebResponse<?>> update(@PathVariable("id") String id,
+            @RequestBody CreateEducationRequest education) {
         return ResponseEntity.ok(ResponseHelper.ok(educationService.update(education, id)));
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {

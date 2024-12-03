@@ -8,5 +8,5 @@ import com.lawencon.jobportal.persistent.entity.JobTitle;
 
 @Repository
 public interface JobTitleRepository extends JpaRepository<JobTitle, String>, JpaSpecificationExecutor<JobTitle> {
-    
+    boolean existsById(String id);
 }

@@ -19,18 +19,17 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/v1/notifications")
 public class NotificationController {
-    private final  NotificationService notificationService;
+    private final NotificationService notificationService;
 
     @GetMapping("/{id}/user")
-    public ResponseEntity<WebResponse<List<NotificationResponse>>> getAllNotification(@PathVariable String  id) {
+    public ResponseEntity<WebResponse<List<NotificationResponse>>> getAllNotification(@PathVariable String id) {
         return ResponseEntity.ok(ResponseHelper.ok(notificationService.getAllNotification(id)));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WebResponse<String>> updateNotification(@PathVariable String id){
+    public ResponseEntity<WebResponse<String>> updateNotification(@PathVariable String id) {
         notificationService.markAsRead(id);
         return ResponseEntity.ok(ResponseHelper.ok(
-            "Notification has been marked as read")
-        );
+                "Notification has been marked as read"));
     }
 }

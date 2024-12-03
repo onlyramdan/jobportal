@@ -1,5 +1,7 @@
 package com.lawencon.jobportal.service.impl;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +28,6 @@ import com.lawencon.jobportal.model.request.CreateProfileRequest;
 import com.lawencon.jobportal.model.request.CreateUserRequest;
 import com.lawencon.jobportal.model.request.PagingRequest;
 import com.lawencon.jobportal.model.request.UpdateUserRequest;
-import com.lawencon.jobportal.model.response.ProfileResponse;
 import com.lawencon.jobportal.model.response.UserResponse;
 import com.lawencon.jobportal.persistent.entity.Profile;
 import com.lawencon.jobportal.persistent.entity.Role;
@@ -38,9 +39,6 @@ import com.lawencon.jobportal.service.UserService;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-
-import java.time.ZonedDateTime;
-import java.time.ZoneOffset;
 
 @Service
 @Transactional
@@ -200,6 +198,11 @@ public class UserServiceImpl implements UserService {
         CreateProfileRequest profileRequest = new CreateProfileRequest();
         profileRequest.setUser(user);
         profileService.save(profileRequest);
+    }
+
+    @Override
+    public Long countAll() {
+        return userRepository.count();
     }
 
 }

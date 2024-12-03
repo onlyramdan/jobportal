@@ -20,7 +20,10 @@ import com.lawencon.jobportal.model.request.PagingRequest;
 import com.lawencon.jobportal.model.request.UpdateMasterRequest;
 import com.lawencon.jobportal.model.response.MasterResponse;
 import com.lawencon.jobportal.persistent.entity.JobTitle;
+import com.lawencon.jobportal.persistent.repository.JobDescriptionRepository;
+import com.lawencon.jobportal.persistent.repository.JobSpecificationRepository;
 import com.lawencon.jobportal.persistent.repository.JobTitleRepository;
+import com.lawencon.jobportal.persistent.repository.VacancyRepository;
 import com.lawencon.jobportal.service.JobTitleService;
 import com.lawencon.jobportal.util.GenerateCode;
 
@@ -31,6 +34,9 @@ import lombok.AllArgsConstructor;
 @Transactional
 @AllArgsConstructor
 public class JobTitleServiceImpl implements JobTitleService {
+    private final VacancyRepository vacancyRepository;
+    private final JobDescriptionRepository jobDescriptionRepository;
+    private final JobSpecificationRepository jobSpecificationRepository;
     private final JobTitleRepository jobTitleRepository;
 
     private MasterResponse converterResponse(JobTitle jobTitle) {
@@ -41,6 +47,18 @@ public class JobTitleServiceImpl implements JobTitleService {
 
     @Override
     public void delete(String id) {
+        if (!jobTitleRepository.existsById(id)) {
+            throw new IllegalArgumentException("Job Title with ID " + id + " does not exist.");
+        }
+        if (vacancyRepository.existsByJobTitleId(id)) {
+            throw new IllegalStateException("Cannot delete. Job Title is being used in Vacancy.");
+        }
+        if (jobDescriptionRepository.existsByJobTitleId(id)) {
+            throw new IllegalStateException("Cannot delete. Job Title is being used in Job Description.");
+        }
+        if (jobSpecificationRepository.existsByJobTitleId(id)) {
+            throw new IllegalStateException("Cannot delete. Job Title is being used in Job Specification.");
+        }
         jobTitleRepository.deleteById(id);
     }
 
@@ -98,5 +116,10 @@ public class JobTitleServiceImpl implements JobTitleService {
             return response;
         }).toList();
         return new PageImpl<>(responses, pageRequest, jobTitleResponse.getTotalElements());
+    }
+
+    @Override
+    public Long countAll() {
+        return jobTitleRepository.count();
     }
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface AplicationRepository extends JpaRepository<Application, String>  {  
        List<Application> findByStatusVacancyTrxId(String statusVacancyTrxId); 
+       List<Application> findByCandidateId(String id);
 }

@@ -21,32 +21,32 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/education-levels"})
+@RequestMapping({ "/api/v1/education-levels" })
 public class EducationLevelController {
-    private final EducationLevelService  educationLevelService;
+    private final EducationLevelService educationLevelService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> save(@RequestBody MasterRequest request){
+    public ResponseEntity<WebResponse<?>> save(@RequestBody MasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(educationLevelService.save(request)));
     }
 
     @GetMapping()
-    public ResponseEntity<WebResponse<?>> findAll(){
+    public ResponseEntity<WebResponse<?>> findAll() {
         return ResponseEntity.ok(ResponseHelper.ok(educationLevelService.findAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> findById(@PathVariable("id") String id){
+    public ResponseEntity<WebResponse<?>> findById(@PathVariable("id") String id) {
         return ResponseEntity.ok(ResponseHelper.ok(educationLevelService.findById(id)));
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request){
+    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(educationLevelService.update(request)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id){
+    public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
         educationLevelService.delete(id);
         return ResponseEntity.ok(ResponseHelper.ok());
     }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface JobDescriptionRepository extends JpaRepository<JobDescription, String> {
     List<JobDescription> findByJobTitleId(String jobTitleId);
+    boolean existsByJobTitleId(String jobTitleId);
 }

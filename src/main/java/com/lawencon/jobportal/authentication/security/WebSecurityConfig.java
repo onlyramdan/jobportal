@@ -32,30 +32,31 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    @Setter(onMethod_ = {@Autowired}, onParam_ = {@Lazy})
+    @Setter(onMethod_ = { @Autowired }, onParam_ = { @Lazy })
     private UserService userService;
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http,
-    JwtAuthenticationFilter jwtAuthenticationFilter )
-    throws Exception {
+            JwtAuthenticationFilter jwtAuthenticationFilter)
+            throws Exception {
         http
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(request->request
-                    .requestMatchers("/api/v1/login", "/api/v1/registers", "/api/v1/roles/code/*" ,"/api/v1/verify","/api/v1/resend").permitAll()
-                    .anyRequest().authenticated())
-        .httpBasic(Customizer.withDefaults())
-        .sessionManagement(
-            maneger -> maneger.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .authenticationProvider(authenticationProvider())
-        .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    return  http.build();
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/v1/login", "/api/v1/registers", "/api/v1/roles/code/*", "/api/v1/verify",
+                                "/api/v1/resend")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(
+                        maneger -> maneger.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userService.userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
@@ -63,25 +64,26 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Origin", "User-Agent" , "enctype"));
-        UrlBasedCorsConfigurationSource  source = new UrlBasedCorsConfigurationSource();
+        configuration
+                .setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Origin", "User-Agent", "enctype"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-    
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
-        throws Exception {
-            return config.getAuthenticationManager();
-        }
+            throws Exception {
+        return config.getAuthenticationManager();
+    }
 }
