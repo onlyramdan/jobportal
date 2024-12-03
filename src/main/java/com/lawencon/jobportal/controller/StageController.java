@@ -21,12 +21,12 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/stages"})
+@RequestMapping({ "/api/v1/stages" })
 public class StageController {
-    private final StageService  stageService;
-      
+    private final StageService stageService;
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> save(@RequestBody  MasterRequest request) {
+    public ResponseEntity<WebResponse<?>> save(@RequestBody MasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(stageService.save(request)));
     }
 
@@ -41,13 +41,13 @@ public class StageController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request){
+    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(stageService.update(request)));
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
+    public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
         stageService.delete(id);
         return ResponseEntity.ok(ResponseHelper.ok());
-    }    
+    }
 }

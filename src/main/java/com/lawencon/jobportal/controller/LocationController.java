@@ -46,7 +46,7 @@ public class LocationController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
+    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(locationService.update(request)));
     }
 
@@ -58,10 +58,9 @@ public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest re
 
     @GetMapping("/pages")
     public ResponseEntity<WebResponse<List<MasterResponse>>> findAllPage(
-        PagingRequest pagingRequest,
-        @RequestParam(required = false)  String inquiry)
-    {
-        return ResponseEntity.ok(ResponseHelper.ok(pagingRequest,locationService.findAll(pagingRequest, inquiry)));
+            PagingRequest pagingRequest,
+            @RequestParam(required = false) String inquiry) {
+        return ResponseEntity.ok(ResponseHelper.ok(pagingRequest, locationService.findAll(pagingRequest, inquiry)));
     }
 
 }

@@ -1,4 +1,5 @@
 package com.lawencon.jobportal.model.request;
+
 import java.time.LocalDate;
 import com.lawencon.jobportal.persistent.entity.Application;
 import lombok.Data;

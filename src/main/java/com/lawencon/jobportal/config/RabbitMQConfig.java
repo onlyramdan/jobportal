@@ -30,18 +30,19 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding binding(Queue vacancyNotificationQueue, TopicExchange vacancyNotificationExchange) {
-        return BindingBuilder.bind(vacancyNotificationQueue).to(vacancyNotificationExchange).with(VACANCY_NOTIFICATION_ROUTING_KEY);
+        return BindingBuilder.bind(vacancyNotificationQueue).to(vacancyNotificationExchange)
+                .with(VACANCY_NOTIFICATION_ROUTING_KEY);
     }
 
     @Bean
-    public Jackson2JsonMessageConverter jackson2JsonMessageConverter(){
+    public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter(new ObjectMapper());
     }
 
     @Bean
-    public RabbitTemplate  rabbitTemplate(ConnectionFactory connectionFactory){
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setMessageConverter(jackson2JsonMessageConverter());
         return template;
-    }    
+    }
 }

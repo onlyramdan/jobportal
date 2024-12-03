@@ -25,4 +25,5 @@ public interface UserService {
     Boolean checkEmail(String email);
     Page<UserResponse> findAll(PagingRequest pagingRequest, String inquiry);
     void createByAdmin(CreateUserRequest request);
+    Long countAll();
 }

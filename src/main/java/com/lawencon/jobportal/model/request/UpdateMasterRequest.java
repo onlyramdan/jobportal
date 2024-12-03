@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class UpdateMasterRequest extends MasterRequest {
     private String id;
-}
+    private Boolean isActive;
+}   

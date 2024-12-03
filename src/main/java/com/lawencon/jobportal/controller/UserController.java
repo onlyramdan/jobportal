@@ -41,13 +41,14 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> findById(@PathVariable String id) {
+    public ResponseEntity<WebResponse<UserResponse>> findById(@PathVariable String id) {
         return ResponseEntity.ok(ResponseHelper.ok(userService.findById(id)));
     }
 
     @PutMapping()
-    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateUserRequest request) {
-        return ResponseEntity.ok(ResponseHelper.ok(userService.update(request)));
+    public ResponseEntity<WebResponse<String>> update(@RequestBody UpdateUserRequest request) {
+        userService.update(request);
+        return ResponseEntity.ok(ResponseHelper.ok("Update User Successfull"));
     }
 
     @DeleteMapping("/{id}")

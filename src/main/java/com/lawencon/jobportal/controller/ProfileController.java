@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +18,9 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/profiles"})
+@RequestMapping({ "/api/v1/profiles" })
 public class ProfileController {
-    private final  ProfileService profileService;
+    private final ProfileService profileService;
 
     @GetMapping("/{id}")
     public ResponseEntity<WebResponse<?>> findById(@PathVariable("id") String id) {
@@ -29,7 +28,8 @@ public class ProfileController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WebResponse<?>> update(@RequestBody CreateProfileRequest request, @PathVariable("id")  String id) {
+    public ResponseEntity<WebResponse<?>> update(@RequestBody CreateProfileRequest request,
+            @PathVariable("id") String id) {
         return ResponseEntity.ok(ResponseHelper.ok(profileService.update(request, id)));
     }
 

@@ -19,15 +19,14 @@ import com.lawencon.jobportal.service.StatusAplicationService;
 
 import lombok.AllArgsConstructor;
 
-
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1/application-statuses"})
+@RequestMapping({ "/api/v1/application-statuses" })
 public class StatusAplicationController {
     private final StatusAplicationService statusAplicationService;
 
-     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> save(@RequestBody  MasterRequest request) {
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WebResponse<?>> save(@RequestBody MasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(statusAplicationService.save(request)));
     }
 
@@ -42,13 +41,13 @@ public class StatusAplicationController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request){
+    public ResponseEntity<WebResponse<?>> update(@RequestBody UpdateMasterRequest request) {
         return ResponseEntity.ok(ResponseHelper.ok(statusAplicationService.update(request)));
     }
 
     @DeleteMapping("/{id}")
-    public  ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
+    public ResponseEntity<WebResponse<?>> delete(@PathVariable("id") String id) {
         statusAplicationService.delete(id);
         return ResponseEntity.ok(ResponseHelper.ok());
-    }    
+    }
 }

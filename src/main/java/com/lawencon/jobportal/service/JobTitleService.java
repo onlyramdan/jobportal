@@ -18,4 +18,5 @@ public interface JobTitleService {
     MasterResponse update(UpdateMasterRequest request);
     void delete(String id);
     Page<MasterResponse> findAll(PagingRequest pagingRequest, String inquiry);
+    Long countAll();
 }

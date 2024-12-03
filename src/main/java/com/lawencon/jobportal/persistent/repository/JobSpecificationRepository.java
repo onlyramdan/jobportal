@@ -10,4 +10,5 @@ import com.lawencon.jobportal.persistent.entity.JobSpecification;
 public interface JobSpecificationRepository extends JpaRepository<JobSpecification, String> {
     List<JobSpecification> findByJobTitleId(String jobTitleId);
     void deleteByJobTitleId(String id);
+    boolean existsByJobTitleId(String jobTitleId);
 }

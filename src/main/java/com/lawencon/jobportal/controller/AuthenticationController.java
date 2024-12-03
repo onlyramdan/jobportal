@@ -1,4 +1,4 @@
-    package com.lawencon.jobportal.controller;
+package com.lawencon.jobportal.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,24 +22,22 @@ import com.lawencon.jobportal.service.VerifyUserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
-
 @RestController
 @AllArgsConstructor
-@RequestMapping({"/api/v1"})
+@RequestMapping({ "/api/v1" })
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final VerifyUserService  verifyUserService;
+    private final VerifyUserService verifyUserService;
 
-
-    @PostMapping(value = "/registers"  ,consumes = MediaType.APPLICATION_JSON_VALUE , produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/registers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<WebResponse<?>> create(@Valid @RequestBody CreateUserRequest request) {
         verifyUserService.register(request);
         return ResponseEntity.ok(ResponseHelper.ok("Verification Code Send To " + request.getEmail()));
     }
-    
-    @PostMapping(value = "/login" , produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<WebResponse<JwtAuthenticationResponse>> login(@Valid @RequestBody LoginRequest  request) {
-        return  ResponseEntity.ok(ResponseHelper.ok(authenticationService.login(request)));
+
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<WebResponse<JwtAuthenticationResponse>> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(ResponseHelper.ok(authenticationService.login(request)));
     }
 
     @PostMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,7 +53,7 @@ public class AuthenticationController {
     }
 
     @GetMapping(value = "user/session")
-    public ResponseEntity<WebResponse<UserSessionResponse>> getSession(){
+    public ResponseEntity<WebResponse<UserSessionResponse>> getSession() {
         return ResponseEntity.ok(ResponseHelper.ok(authenticationService.getSession()));
     }
 }
