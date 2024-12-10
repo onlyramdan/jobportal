@@ -48,16 +48,16 @@ public class JobTitleServiceImpl implements JobTitleService {
     @Override
     public void delete(String id) {
         if (!jobTitleRepository.existsById(id)) {
-            throw new IllegalArgumentException("Job Title with ID " + id + " does not exist.");
+            throw new ResponseStatusException( HttpStatus.BAD_REQUEST,"Job Title with ID " + id + " does not exist.");
         }
         if (vacancyRepository.existsByJobTitleId(id)) {
-            throw new IllegalStateException("Cannot delete. Job Title is being used in Vacancy.");
+            throw new ResponseStatusException( HttpStatus.BAD_REQUEST,"Cannot delete. Job Title is being used in Vacancy.");
         }
         if (jobDescriptionRepository.existsByJobTitleId(id)) {
-            throw new IllegalStateException("Cannot delete. Job Title is being used in Job Description.");
+            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Cannot delete. Job Title is being used in Job Description.");
         }
         if (jobSpecificationRepository.existsByJobTitleId(id)) {
-            throw new IllegalStateException("Cannot delete. Job Title is being used in Job Specification.");
+            throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Cannot delete. Job Title is being used in Job Specification.");
         }
         jobTitleRepository.deleteById(id);
     }
